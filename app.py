@@ -19,11 +19,11 @@ def is_authenticated(request):
     ssid = request.cookies.get('ssid', '')
 
     list_user = User.filter(username=username)
-
-    if list_user != []: 
-        user = list_user[0]
-        if ssid == str(user.id):
-            return True
+    if username and ssid:
+        if list_user != []: 
+            user = list_user[0]
+            if ssid == str(user.id):
+                return True
         
     return False
 
@@ -55,6 +55,7 @@ def register():
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     response = make_response(redirect(url_for('login')))
+    response.set_cookie(key='username',value="")
     response.set_cookie(key='ssid',value="")
     return response
 
